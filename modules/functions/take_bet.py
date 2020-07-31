@@ -3,19 +3,24 @@ Module for function take_bet
 """
 
 
-def take_bet(total):
+def take_bet(theChips):
     """
     функция, которая запрашивает у игрока ставку
-    @:param total сколько всего валюты у игрока
-    @:return bet принятая ставка
+    @:param theChips сколько всего валюты у игрока
+    @:return theChips принятая ставка
     """
     bet = 0
-    while bet <= 0 or bet > total:
+    balance = theChips.total
+    while bet <= 0 or bet > balance:
         try:
-            bet = int(input(f"У вас сейчас {total}$. Ваша ставка: "))
-            if bet > total:
+            bet = int(input(f"У вас сейчас {balance}$. Ваша ставка: "))
+            if bet > balance:
                 print("Нельзя установить ставку больше, чем у вас есть")
+        except KeyboardInterrupt:
+            print("\nGood bye")
+            raise SystemExit(0)
         except:
-            print("не верное значение")
+            print("неверное значение")
             bet = 0
+    theChips.total -= bet
     return bet

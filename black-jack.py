@@ -1,31 +1,18 @@
-import os
-from time import sleep
-
-# подключение класса с колодой
 from modules.classes.Deck import Deck
-
-# подключение класса для подсчета фишек игрока
 from modules.classes.Chips import Chips
-
-# функция для запроса ставки игрока
-from modules.functions.take_bet import take_bet
-
-# подключение класса для хранения карт игрока
 from modules.classes.Hand import Hand
-
-# функция для отображения карт и прочей информации
+from modules.functions.take_bet import take_bet
 from modules.functions.show_some import show_some
-
-# функция, которая запрашивает действие игрока
 from modules.functions.hit_or_stand import hit_or_stand
-
-# функция прогресс-строка
-from modules.global_vars import playing
-
-# подключение
 from modules.functions.progress import progress
+from modules.functions.clear import clear
+from modules.global_vars import playing
+from modules.functions.hit import hit
+
 
 while True:
+    clear()
+
     print("Добро пожаловать в игру!")
 
     # создается колода карт
@@ -33,31 +20,34 @@ while True:
     # перемешивается колода
     theDeck.shuffle()
 
-    # выдать игроку 2 карты
-    handPlayer = Hand()
-    handPlayer.add_card(theDeck.deal())
-    handPlayer.add_card(theDeck.deal())
-
-    # выдать компьюетру 2 карты
-    handDealer = Hand()
-    handDealer.add_card(theDeck.deal())
-    handDealer.add_card(theDeck.deal())
-
     # определили количество фишек игрока
     theChips = Chips()
 
     # запросили ставку игрока
-    bet = take_bet(theChips.total)
+    bet = take_bet(theChips)
 
     print(f"Ставка {bet}$ принята")
     progress(4, 'Игра начнется через')
 
+    print("Выдаем карты")
+
+    # выдать игроку 2 карты
+    handPlayer = Hand()
+    hit(theDeck, handPlayer)
+    hit(theDeck, handPlayer)
+
+    # выдать компьюетру 2 карты
+    handDealer = Hand()
+    hit(theDeck, handDealer, 1)
+    hit(theDeck, handDealer, 1)
+
     # вывести карты
-    show_some(handPlayer, handDealer, bet)
+    show_some(handPlayer, handDealer, bet, theChips.total)
 
     while playing:
 
-        hit_or_stand(theDeck,handPlayer)
+        playing = hit_or_stand(theDeck, handPlayer)
+        show_some(handPlayer, handDealer, bet, theChips.total)
 
-        playing = 0
+    print("Дальше...")
     break

@@ -1,11 +1,10 @@
 """
 Module for function show_some
 """
+from modules.functions.clear import clear
 
-import os
 
-
-def show_some(player, dealer, bet):
+def show_some(player, dealer, bet, balance):
     """
     функция которая выводит карты игрока и 1 из 2х карт компьюетра
 
@@ -15,13 +14,12 @@ def show_some(player, dealer, bet):
     :type dealer: Hand
     :param bet: текущая ставка
     :type bet: int
+    :param balance: баланс игрока
+    :type bet: int
     """
 
-    if os.name == 'nt':
-        os.system("cls")
-    elif os.name == 'posix':
-        os.system("clear")
-
+    clear()
+    print(f"Текущий баланс {balance}$")
     print(f"Текущая ставка {bet}$")
 
     print("Карты диллера:")
