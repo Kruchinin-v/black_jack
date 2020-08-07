@@ -93,7 +93,6 @@ while game_on:
         continue
     elif handDealer.value == handPlayer.value:
         print("Ничья")
-        balance += bet
         print(f"balance = {balance}")
         game_on = continue_the_game(balance)
         continue
