@@ -1,5 +1,5 @@
 # подключение переменной состояния игры
-from modules.global_vars import playing
+# from modules.global_vars import playing
 
 from modules.functions.hit import hit
 
@@ -14,7 +14,7 @@ def hit_or_stand(deck, hand):
     if more == 'y':
         value = hit(deck, hand)
 
-    if value > 21 or more == 'n':
+    if value >= 21 or more == 'n':
         return 0
 
     return 1

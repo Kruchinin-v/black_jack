@@ -24,7 +24,11 @@ class Hand:
         """
         self.cards.append(card)
         rank = self.cards[len(self.cards) - 1].__str__().split(' ')[0]
-        self.value += values[rank]
+
+        if rank == "Туз" and self.aces == 1:
+            self.value += 1
+        else:
+            self.value += values[rank]
 
     def adjust_for_ace(self):
         """
@@ -50,7 +54,10 @@ class Hand:
         for i in range(count):
             card = self.cards[i].__str__()
             rank = card.split(" ")[0]
-            card = alignment_string(f"{card} - {values[rank]}", 20)
+            val = values[rank]
+            if rank == 'Туз' and self.aces == 1:
+                val = 1
+            card = alignment_string(f"{card} - {val}", 20)
             print("----------------------")
             print(f"| {card}|")
             print("----------------------")
