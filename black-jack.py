@@ -12,100 +12,99 @@ from modules.functions.hit import hit
 
 
 def main():
-    pass
+    game_on = True
 
+    try:
+        balance = int(sys.argv[1])
+    except Exception:
+        balance = 100
 
-game_on = True
+    clear()
+    print("===================================================")
+    print("==========>> Игра Black-Jack by Ovod <<============")
+    print("===================================================")
+    print("")
+    print("Добро пожаловать в игру!")
 
-try:
-    balance = int(sys.argv[1])
-except Exception:
-    balance = 100
+    while game_on:
+        playing = True
 
-clear()
-print("===================================================")
-print("==========>> Игра Black-Jack by Ovod <<============")
-print("===================================================")
-print("")
-print("Добро пожаловать в игру!")
+        # создается колода карт
+        theDeck = Deck()
+        # перемешивается колода
+        theDeck.shuffle()
 
+        # определили количество фишек игрока
+        theChips = Chips(balance)
 
-while game_on:
-    playing = True
+        # запросили ставку игрока
+        bet = take_bet(theChips)
 
-    # создается колода карт
-    theDeck = Deck()
-    # перемешивается колода
-    theDeck.shuffle()
+        print(f"Ставка {bet}$ принята")
+        progress(4, 'Игра начнется через')
 
-    # определили количество фишек игрока
-    theChips = Chips(balance)
+        print("Выдаем карты")
 
-    # запросили ставку игрока
-    bet = take_bet(theChips)
+        # выдать игроку 2 карты
+        handPlayer = Hand()
+        hit(theDeck, handPlayer)
+        hit(theDeck, handPlayer)
 
-    print(f"Ставка {bet}$ принята")
-    progress(4, 'Игра начнется через')
-
-    print("Выдаем карты")
-
-    # выдать игроку 2 карты
-    handPlayer = Hand()
-    hit(theDeck, handPlayer)
-    hit(theDeck, handPlayer)
-
-    # выдать компьюетру 2 карты
-    handDealer = Hand()
-    hit(theDeck, handDealer, mode=1)
-    hit(theDeck, handDealer, mode=1)
-
-    # вывести карты
-    show_some(handPlayer, handDealer, bet, theChips.total)
-
-    while playing:
-        playing = hit_or_stand(theDeck, handPlayer)
-        show_some(handPlayer, handDealer, bet, theChips.total)
-
-    if handPlayer.value > 21:
-        show_some(handPlayer, handDealer, bet, theChips.total, mode=1)
-        print("Перебор")
-        balance = theChips.total
-        print(f"balance = {balance}")
-        game_on = continue_the_game(balance)
-        continue
-
-    while handDealer.value < 17:
+        # выдать компьюетру 2 карты
+        handDealer = Hand()
+        hit(theDeck, handDealer, mode=1)
         hit(theDeck, handDealer, mode=1)
 
-    show_some(handPlayer, handDealer, bet, theChips.total, mode=1)
+        # вывести карты
+        show_some(handPlayer, handDealer, bet, theChips.total)
 
-    if handDealer.value > 21:
-        print("У диллера перебор, Игрок выиграл! Поздравляю")
-        balance += bet * 2
-        print(f"balance = {balance}")
-        game_on = continue_the_game(balance)
-        continue
-    elif handDealer.value < handPlayer.value:
-        print("Игрок выиграл! Поздравляю")
-        balance += bet * 2
-        print(f"balance = {balance}")
-        game_on = continue_the_game(balance)
-        continue
-    elif handDealer.value == handPlayer.value:
-        print("Ничья")
-        print(f"balance = {balance}")
-        game_on = continue_the_game(balance)
-        continue
-    else:
-        print("Игрок приграл! Повезет в следующий раз")
-        balance = theChips.total
-        print(f"balance = {balance}")
-        game_on = continue_the_game(balance)
-        continue
+        while playing:
+            playing = hit_or_stand(theDeck, handPlayer)
+            show_some(handPlayer, handDealer, bet, theChips.total)
 
-    print("иной вариант???")
-    game_on = continue_the_game(balance)
+        if handPlayer.value > 21:
+            show_some(handPlayer, handDealer, bet, theChips.total, mode=1)
+            print("Перебор")
+            balance = theChips.total
+            print(f"balance = {balance}")
+            game_on = continue_the_game(balance)
+            continue
 
-print("Игра окончена. Спасибо Вам за игру!")
-print("Ждем Вас снова! Bay")
+        while handDealer.value < 17:
+            hit(theDeck, handDealer, mode=1)
 
+        show_some(handPlayer, handDealer, bet, theChips.total, mode=1)
+
+        if handDealer.value > 21:
+            print("У диллера перебор, Игрок выиграл! Поздравляю")
+            balance += bet * 2
+            print(f"balance = {balance}")
+            game_on = continue_the_game(balance)
+            continue
+        elif handDealer.value < handPlayer.value:
+            print("Игрок выиграл! Поздравляю")
+            balance += bet * 2
+            print(f"balance = {balance}")
+            game_on = continue_the_game(balance)
+            continue
+        elif handDealer.value == handPlayer.value:
+            print("Ничья")
+            print(f"balance = {balance}")
+            game_on = continue_the_game(balance)
+            continue
+        else:
+            print("Игрок приграл! Повезет в следующий раз")
+            balance = theChips.total
+            print(f"balance = {balance}")
+            game_on = continue_the_game(balance)
+            continue
+
+    print("Игра окончена. Спасибо Вам за игру!")
+    print("Ждем Вас снова! Bay")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Good by")
